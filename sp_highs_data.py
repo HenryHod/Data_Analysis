@@ -1,11 +1,8 @@
 import pandas as pd
-from matplotlib import pyplot as plt
 import yfinance as yf
 from datetime import datetime
-import numpy as np
 sp_data = yf.download('^GSPC')
 sp_data = pd.DataFrame(sp_data)
-#print(sp_data.head())
 highest_price = 0
 all_time_high_count = 0
 day_count = 0
@@ -29,17 +26,17 @@ for day_count in day_count_list:
             five_list += 1
             if day_count <= 1:
                 one_list += 1
-ten_day_percentage = ten_list/all_time_high_count
-five_day_percentage = five_list/all_time_high_count
-one_day_percentage = one_list/all_time_high_count
+ten_day_percentage = int((ten_list/all_time_high_count)*100)
+five_day_percentage = int((five_list/all_time_high_count)*100)
+one_day_percentage = int((one_list/all_time_high_count)*100)
 print(ten_day_percentage)
 print(five_day_percentage)
 print(one_day_percentage)
-last_year_highs_count = 0
-number_of_trading_days_2021 = 287
-last_year_highest_price = sp_data['Close'][-number_of_trading_days_2021]
-for x in reversed(range(1,number_of_trading_days_2021-1)):
+ytd_highs_count = 0
+ytd_days = (datetime(2022,1,1) - datetime.now()).days
+last_year_highest_price = sp_data['Close'][ytd_days]
+for x in reversed(range(1,ytd_days-1)):
     if  sp_data['Close'][-x] > last_year_highest_price:
         last_year_highest_price = sp_data['Close'][-x]
-        last_year_highs_count += 1
-print(last_year_highs_count)
+        ytd_highs_count += 1
+print(ytd_highs_count)
